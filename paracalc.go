@@ -12,6 +12,9 @@ func sum(values [] int, resChan chan int){
     resChan <- sum
 }
 
+/**
+0xc20802a070 20 120
+*/
 func main(){
     values := [] int {2,3,4,5,6,3,7,33,55,22}
     resChan := make(chan int, 2)

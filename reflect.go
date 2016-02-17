@@ -10,6 +10,12 @@ type Bird struct {
     LifeExpectance int
 }
 
+/**
+0, Name, string, Sparrow 
+0, Name, string, Sparrow 
+1, LifeExpectance, int, 3 
+1, LifeExpectance, int, 3 
+*/
 func main(){
     sparrow := &Bird{"Sparrow", 3}
     s := reflect.ValueOf(sparrow).Elem()
