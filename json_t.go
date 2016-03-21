@@ -12,6 +12,7 @@ import (
 )
 
 func main(){
+    //Decoder用于解析[多个]json
     const jsonStream = `
         {"Name": "Ed", "Text": "Knock knock."}
         {"Name": "Sam", "Text": "Who's there?"}
@@ -34,7 +35,7 @@ func main(){
     }
 
 
-
+    //官方案例
     var jsonBlob = []byte(`[
         {"Name": "Platypus", "Order": "Monotremata"},
         {"Name": "Quoll",    "Order": "Dasyuromorphia"}
@@ -52,8 +53,8 @@ func main(){
     fmt.Println(animals[0].Name)
 
 
-
-
+    //结构体属性必须是大写，json则不是必须
+    //要想解析在float64到int64之间范围值的必须要提前声明int64，不然会转成float64被截断,官方文档明确注释了
     var jst = []byte(`[{"a":"ddddd","n":9223372036854775807},{"a":"ssssss","n":223372036854775807}]`)
     type va struct {
         A string
@@ -92,9 +93,7 @@ func main(){
     }
     fmt.Println("\n","*************","\n")
 
-
-
-
+    //xmjson的用法,(xmjson为内部保密库)
     var jstr string = `{
         "test": { 
             "string_slice": ["asdf", "ghjk", "zxcv"],
