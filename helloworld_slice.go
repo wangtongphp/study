@@ -17,10 +17,10 @@ func main() {
     //var res = slIn(0, sl_t)
     //res := slRand(sl_t)
     //fmt.Println(res)
-    //timeF()
+    timeF()
     //stringSplit()
     //templateMain()
-    fileMain()
+    //fileMain()
 }
 
 func fileMain(){
