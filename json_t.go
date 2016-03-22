@@ -10,15 +10,63 @@ import (
     "io"
     "strings"
     "strconv"
+    "github.com/go-simplejson"
 )
 
 func main(){
+    jsonT()
+
+    simplejsonT()
+    os.Exit(1)
+
     unmarshalBug()
     unmarshalT()
     decoderT()
     xmjsonT()
     xmjsonT1()
 
+}
+
+var jsonDemo = []byte(`[{"a":"ddddd","n":9223372036854775807},{"a":"ssssss","n":9223372036854775807}]`)
+
+
+//go 解析json　最终解决方案，能准确的读出各种类型的值
+func jsonT(){
+    js, _:= simplejson.NewJson(jsonDemo)
+    vDataHd := js.GetIndex(0).Get("n").Interface()
+    switch vDataHd.(type) {
+        case json.Number:
+            vDataHdi, err := js.GetIndex(0).Get("n").Int64()
+            if err != nil {
+                vDataHd, _ = js.GetIndex(0).Get("n").Float64()
+                vDataHd = strconv.FormatFloat(vDataHd.(float64), 'f', -1, 64)
+                fmt.Println("number float64", vDataHd, "\n")
+            } else {
+                vDataHd = vDataHdi
+                fmt.Println("number int64", vDataHd, "\n")
+            }
+        case string:
+            fmt.Println("string", vDataHd, "\n")
+    }
+    fmt.Println("\n","*************","\n")
+}
+
+//用simplejsonT处理9223372036854775807类int64数据
+func simplejsonT(){
+    js, _:= simplejson.NewJson(jsonDemo)
+    d := js.GetIndex(0).Get("n").Interface()
+    fmt.Println(d, reflect.TypeOf(d))
+
+    da := js.GetIndex(0).Get("a").Interface()
+    fmt.Println(da, reflect.TypeOf(da))
+
+    di,_ := js.GetIndex(1).Get("n").Int64()
+    fmt.Println(di, reflect.TypeOf(di))
+
+    ds, _ := js.GetIndex(1).Get("n").String()
+    fmt.Println(ds, reflect.TypeOf(ds))
+
+    fmt.Println("\n","*************","\n")
 }
 
 
