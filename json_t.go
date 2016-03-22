@@ -9,52 +9,22 @@ import (
     "encoding/json"
     "io"
     "strings"
+    "strconv"
 )
 
 func main(){
-    //Decoder用于解析[多个]json
-    const jsonStream = `
-        {"Name": "Ed", "Text": "Knock knock."}
-        {"Name": "Sam", "Text": "Who's there?"}
-        {"Name": "Ed", "Text": "Go fmt."}
-        {"Name": "Sam", "Text": "Go fmt who?"}
-        {"Name": "Ed", "Text": "Go fmt yourself!"}
-    `
-    type Message struct {
-        Name, Text string
-    }
-    dec := json.NewDecoder(strings.NewReader(jsonStream))
-    for {
-        var m Message
-        if err := dec.Decode(&m); err == io.EOF {
-            break
-        } else if err != nil {
-            fmt.Println("err")
-        }
-        fmt.Printf("%s: %s\n", m.Name, m.Text)
-    }
+    unmarshalBug()
+    unmarshalT()
+    decoderT()
+    xmjsonT()
+    xmjsonT1()
+
+}
 
 
-    //官方案例
-    var jsonBlob = []byte(`[
-        {"Name": "Platypus", "Order": "Monotremata"},
-        {"Name": "Quoll",    "Order": "Dasyuromorphia"}
-    ]`)
-    type Animal struct {
-        Name  string
-        Order string
-    }
-    var animals []Animal
-    err := json.Unmarshal(jsonBlob, &animals)
-    if err != nil {
-        fmt.Println("error:", err)
-    }
-    fmt.Printf("%+v", animals)
-    fmt.Println(animals[0].Name)
-
-
-    //结构体属性必须是大写，json则不是必须
-    //要想解析在float64到int64之间范围值的必须要提前声明int64，不然会转成float64被截断,官方文档明确注释了
+//结构体属性必须是大写，json则不是必须
+//要想解析在float64到int64之间范围值的必须要提前声明int64，不然会转成float64被截断,官方文档明确注释了
+func unmarshalBug(){
     var jst = []byte(`[{"a":"ddddd","n":9223372036854775807},{"a":"ssssss","n":223372036854775807}]`)
     type va struct {
         A string
@@ -62,7 +32,7 @@ func main(){
     }
 
     var vt []va
-    err = json.Unmarshal(jst,&vt)
+    err := json.Unmarshal(jst,&vt)
     if err != nil {
         fmt.Println("error:", err)
     }
@@ -93,7 +63,79 @@ func main(){
     }
     fmt.Println("\n","*************","\n")
 
-    //xmjson的用法,(xmjson为内部保密库)
+}
+
+//官方案例
+func unmarshalT(){
+    
+    var jsonBlob = []byte(`[
+        {"Name": "Platypus", "Order": "Monotremata"},
+        {"Name": "Quoll",    "Order": "Dasyuromorphia"}
+    ]`)
+    type Animal struct {
+        Name  string
+        Order string
+    }
+    var animals []Animal
+    err := json.Unmarshal(jsonBlob, &animals)
+    if err != nil {
+        fmt.Println("error:", err)
+    }
+    fmt.Printf("%+v", animals)
+    fmt.Println(animals[0].Name)
+
+}
+
+//Decoder用于解析[多个]json
+func decoderT(){
+
+    const jsonStream = `
+        {"Name": "Ed", "Text": "Knock knock."}
+        {"Name": "Sam", "Text": "Who's there?"}
+        {"Name": "Ed", "Text": "Go fmt."}
+        {"Name": "Sam", "Text": "Go fmt who?"}
+        {"Name": "Ed", "Text": "Go fmt yourself!"}
+    `
+    type Message struct {
+        Name, Text string
+    }
+    dec := json.NewDecoder(strings.NewReader(jsonStream))
+    for {
+        var m Message
+        if err := dec.Decode(&m); err == io.EOF {
+            break
+        } else if err != nil {
+            fmt.Println("err")
+        }
+        fmt.Printf("%s: %s\n", m.Name, m.Text)
+    }
+
+}
+
+//xmjson处理bigint的bug
+func xmjsonT(){
+    js, _:= xmjson.NewJSON([]byte(`[9223372036854775807,"dfdf"]`))
+    dd, err := js.GetIndex(0).Int64() //-9223372036854775808 <nil>
+    df, err := js.GetIndex(0).Float64() //9.223372036854776e+18
+
+    ds:= js.GetIndex(0).Data()
+    switch ds.(type) {
+        case float64: 
+            fmt.Println(strconv.FormatFloat(ds.(float64), 'f', -1, 64))  //9223372036854776000
+    }
+
+    fmt.Println(dd, df,err)
+
+    var s float64 = 9223372036854775807
+    fmt.Println(strconv.FormatFloat(s,'f',-1,64))
+    var si int64 = 9223372036854775807
+    fmt.Println(si)
+
+    fmt.Println("\n", "********", "\n")
+}
+
+//xmjson的用法,(xmjson为内部保密库)
+func xmjsonT1(){
     var jstr string = `{
         "test": { 
             "string_slice": ["asdf", "ghjk", "zxcv"],
@@ -195,4 +237,5 @@ func main(){
 
 
     os.Exit(1)
+
 }
