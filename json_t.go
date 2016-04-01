@@ -11,9 +11,14 @@ import (
     "strings"
     "strconv"
     "github.com/go-simplejson"
+    "encoding/gob"
+    "bytes"
 )
 
 func main(){
+    jsonEncodeT()
+    os.Exit(1)
+
     jsonT()
 
     simplejsonT()
@@ -23,7 +28,6 @@ func main(){
     unmarshalT()
     decoderT()
     xmjsonT()
-    xmjsonT1()
 
 }
 
@@ -49,6 +53,37 @@ func jsonT(){
             fmt.Println("string", vDataHd, "\n")
     }
     fmt.Println("\n","*************","\n")
+}
+
+//"{\"codition\":\"pay_time > unix_timestamp('2015-07-10 20:21:01' , 'yyyy-MM-dd HH:mm:ss')\"}"
+func jsonEncodeT(){
+    co := `{"codition":"pay_time > unix_timestamp('2015-07-10 20:21:01' , 'yyyy-MM-dd HH:mm:ss')"}`
+    cio := map[string]interface{}{"codition":"pay_time > unix_timestamp('2015-07-10 20:21:01' , 'yyyy-MM-dd HH:mm:ss')"}
+
+    coo, _ := json.Marshal(co)
+    os.Stdout.Write(coo)
+
+    js, _ := simplejson.NewJson([]byte(co))
+    jss, _ := js.EncodePretty()
+    os.Stdout.Write(jss)
+
+    var buf bytes.Buffer
+    enc := gob.NewEncoder(&buf)
+    err := enc.Encode(cio)
+    if err != nil {
+        fmt.Println(err)
+    }
+    os.Stdout.Write(buf.Bytes())
+
+    realJ, _ := json.Marshal(cio)
+    os.Stdout.Write(realJ)
+
+    var realSs string
+    if err:=json.Unmarshal([]byte(co),&realSs); err!=nil{
+        fmt.Println(err)
+    }
+    fmt.Println(realSs)
+
 }
 
 //用simplejsonT处理9223372036854775807类int64数据
@@ -180,110 +215,4 @@ func xmjsonT(){
     fmt.Println(si)
 
     fmt.Println("\n", "********", "\n")
-}
-
-//xmjson的用法,(xmjson为内部保密库)
-func xmjsonT1(){
-    var jstr string = `{
-        "test": { 
-            "string_slice": ["asdf", "ghjk", "zxcv"],
-            "silce": [1, "2", 3],
-            "silcewithsubs": [{"subkeyone": 1},
-            {"subkeytwo": 2, "subkeythree": 3}],
-            "int": 10,
-            "float": 5.150,
-            "bignum": 9223372036854775807,
-            "string": "simplejson",
-            "bool": true 
-        },
-        "test1": { 
-            "string_slice": "sb"
-        }
-    }`
-
-    //xmjson
-    js, err := xmjson.NewJSON([]byte(jstr))
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(js)
-    
-    val, err := js.Get("test1").Get("bignum").String()
-    fmt.Println(val, err, "\n")
-
-    silce, err := js.Get("test").Get("silce").Slice()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(silce)
-
-    aws := js.Get("test").Get("silcewithsubs")
-    fmt.Println(aws)
-
-    awsval, err := aws.GetIndex(0).Get("subkeyone").Int()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(awsval)
-
-    awsval, err = aws.GetIndex(1).Get("subkeytwo").Int()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(awsval)
-
-    awsval, err = aws.GetIndex(1).Get("subkeythree").Int()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(awsval)
-
-    i, err := js.Get("test").Get("int").Int()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(i)
-
-    f, err := js.Get("test").Get("float").Float64()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(f)
-
-    s, err := js.Get("test").Get("string").String()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(s)
-
-    b, err := js.Get("test").Get("bool").Bool()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(b)
-
-    strs, err := js.Get("test").Get("string_slice").StringSlice()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(strs[0])
-
-    gp, err := js.GetLot("test", "string").String()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(gp)
-
-    gp1, err := js.GetLot("test", "int").Int()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println(gp1)
-
-    js.Set("test", "setTest")
-    fmt.Println(js.Get("test")) 
-
-
-    os.Exit(1)
-
 }

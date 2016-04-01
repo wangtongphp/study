@@ -9,13 +9,24 @@ import(
     "github.com/Sirupsen/logrus"
 )
 
+func init(){
+    defer func(){
+        fmt.Println("init defer")
+    }()
+}
+
 func main(){
+    defer func(){
+        fmt.Println("main defer")
+    }()
     logrusT()
     logT()
+    os.Exit(1)
 }
 
 
 func logrusT(){
+
     logrus.SetLevel(logrus.DebugLevel)
     logr := logrus.New()
     logr.Debug("debuggg")
