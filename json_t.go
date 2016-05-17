@@ -58,12 +58,12 @@ func jsonT(){
 //"{\"codition\":\"pay_time > unix_timestamp('2015-07-10 20:21:01' , 'yyyy-MM-dd HH:mm:ss')\"}"
 func jsonEncodeT(){
     co := `{"codition":"pay_time > unix_timestamp('2015-07-10 20:21:01' , 'yyyy-MM-dd HH:mm:ss')"}`
-    cio := map[string]interface{}{"codition":"pay_time > unix_timestamp('2015-07-10 20:21:01' , 'yyyy-MM-dd HH:mm:ss')"}
+    cio := map[string]interface{}{"table_name":"xm_stat_alipay", "codition":"pay_time > unix_timestamp('2015-07-10 20:21:01' , 'yyyy-MM-dd HH:mm:ss')"}
 
-    coo, _ := json.Marshal(co)
+    coo, _ := json.Marshal(cio)
     os.Stdout.Write(coo)
 
-    js, _ := simplejson.NewJson([]byte(co))
+    js, _ := simplejson.NewJson([]byte(coo))
     jss, _ := js.EncodePretty()
     os.Stdout.Write(jss)
 
@@ -73,10 +73,28 @@ func jsonEncodeT(){
     if err != nil {
         fmt.Println(err)
     }
+    fmt.Println("\n","buf.Bytes()")
     os.Stdout.Write(buf.Bytes())
 
     realJ, _ := json.Marshal(cio)
+    fmt.Println("\n","realJ")
     os.Stdout.Write(realJ)
+
+    //cii := make([]map[string]interface{},`{"codition":"p"}`,`{"table":"xm"}`)
+    //cij, _ := json.Marshal(cii)
+    //fmt.Println(cij)
+
+    type cst struct {
+        t   interface{}
+        c   interface{}
+    }
+    cs := &cst{}
+    cs.t = cio["table_name"]
+    cs.c = cio["codition"]
+    fmt.Println("\n struct ", cs)
+    csj, _ := json.Marshal(cs)
+    fmt.Println("\n struct encode", csj)
+    
 
     var realSs string
     if err:=json.Unmarshal([]byte(co),&realSs); err!=nil{
