@@ -10,27 +10,91 @@ $datas = explode(PHP_EOL,$data);
 array_pop($datas);
 $group = array_shift($datas);
 for($g=0; $g<$group; $g++){
+    //省配置
     $provs = array_shift($datas);
     for($i=0;$i<$provs;$i++){
         $p = array_shift($datas);
         $ps = explode(" ", $p);
-        $pr[$ps[2]] = array('min'=>ip2long($ps[0]), 'max'=>ip2long($ps[1]));
+        $pr[] = array('prov'=>$ps[2], 'min'=>ip2long($ps[0]), 'max'=>ip2long($ps[1]));
         $res[$ps[2]] = 0;
     }
+    $pr = array_sort($pr,'min'); 
+
+    //ip
     $ips = array_shift($datas);
     for($j=0;$j<$ips;$j++){
         $ip = ip2long(array_shift($datas));
-        foreach($pr as $k=>$v){
-            if($ip >=  $v['min'] && $ip <= $v['max']){
-                $res[$k] += 1;
+        //二分查找 
+        $low = 0;
+        $high = count($pr)-1;
+        while($low <= $high){
+            $mid = intval(($low+$high)/2);
+            if($ip >=  $pr[$mid]['min'] && $ip <= $pr[$mid]['max']){
+                $res[$pr[$mid]['prov']] += 1;
+                break;
+            }elseif($ip < $pr[$mid]['min']){
+                $high = $mid-1;
+            }elseif($ip > $pr[$mid]['max']){
+                $low = $mid+1;
             }
         }
+
     }
     ksort($res);
     foreach($res as $k=>$v){
         echo $k." ".$v.PHP_EOL;
     }
+
+
+
 }
+
+
+    function array_sort($arr, $col = "", $order = "SORT_ASC")
+    {
+        $new_array  = array();
+        $sort_array = array();
+
+        if(is_array($arr) && !empty($arr))
+        {
+            foreach($arr as $k => $v)
+            {
+                if(is_array($v))
+                {
+                    foreach ($v as $kk => $vv)
+                    {
+                        if($kk == $col)
+                        {
+                            $sort_array[$k] = $vv;
+                        }
+                    }
+                }
+                else
+                {
+                    $sort_array[$k] = $v;
+                }
+            }
+
+            switch ($order)
+            {
+                case "SORT_ASC":
+                    asort($sort_array);
+                break;
+                case "SORT_DESC":
+                    arsort($sort_array);
+                break;
+                default :
+                    return array();
+                    break;
+            }
+
+            foreach ($sort_array as $k => $v) {
+                $new_array[$k] = $arr[$k];
+            }
+        }
+
+        return $new_array;
+    }
 //var_dump($datas);
 
 /**
