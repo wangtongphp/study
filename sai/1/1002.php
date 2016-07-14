@@ -12,33 +12,34 @@ for($g=0; $g<$group; $g++){
     $line = array_shift($datas);
     $str = array_shift($datas);
     $arr = explode(" ", trim($str));
-    run2($arr);
+    run1($arr);
 }
 
 //解法一，循环每个数，键值属于0,3,8.. 时输出
-function run($arr){
+function run1($arr){
     $line = count($arr);
     $i = 0;
     $j = 0;
     foreach ($arr as $k=>$v){
         if ($k+1 >= $line){
-            echo $v." ";
+            $res[] = $v;
             break;
         }
     
         if($j == $k ){
-            echo $v." ";
+            $res[] = $v;
             $j += $i*2+3;
             $i++;
         }
     }
-    
+    echo implode(" ", $res);
     echo PHP_EOL;
 }
 
 //解法二，分为n行，取每行最后一个数
 function  run2($arr){
     $k = 0;
+    $res = array();
     for ($i=1; ; $i++){
         $n = ($i-1)*2+1;
         $row = array_slice($arr,$k, $n);
@@ -46,8 +47,9 @@ function  run2($arr){
         if (empty($row)){
             break;
         }
-        echo array_pop($row)." ";
+        $res[] = array_pop($row);
     }
+    echo implode(" ", $res);
     echo PHP_EOL;
 }
 

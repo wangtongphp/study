@@ -1,5 +1,6 @@
 /*
- * @TODO 结果错误
+ * @author wangtong1@xiaomi.com
+ * @desc 此题注意，每行输出的最后一位不能有空格
  */
 package main
 
@@ -43,9 +44,7 @@ func run(sli []string) {
 		j = j + 2
 	}
 
-	for _, v := range res {
-		fmt.Printf("%s ", v)
-	}
+	fmt.Printf("%s", strings.Join(res, " "))
 	fmt.Print("\n")
 }
 
@@ -79,7 +78,7 @@ func run(sli []string) {
 2
 2 1
 6
-4   3   2   2   5   2
+4 3 2 2 5 2
 样例输出：
 1   4   9   10
 2   1

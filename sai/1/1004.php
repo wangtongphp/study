@@ -1,6 +1,6 @@
 <?PHP
 /**
- * @author wangtong1
+ * @author wangtong1@xiaomi.com
  * @TODO 运行超时
  */
 
@@ -9,6 +9,7 @@ $ds = explode(PHP_EOL,$d);
 $group = array_shift($ds);
 for($i=0;$i<$group;$i++){
     $line = array_shift($ds);
+    $r = array();
     for($j=0;$j<$line;$j++){
         $cmd = explode(" ",array_shift($ds));
         if($cmd[0] == 'set'){
@@ -21,17 +22,29 @@ for($i=0;$i<$group;$i++){
             }
             echo PHP_EOL;
         }elseif($cmd[0] == 'min'){
-            if(empty($r)){
+            if(!isset($r) || empty($r)){
                 echo 'nil';
             }else{
-               asort($r);
-               echo current($r);
+               echo getMin($r);
             }
             echo PHP_EOL;
         }elseif($cmd[0] == 'del'){
             unset($r[$cmd[1]]);
         }
     }
+}
+
+//最小值
+function getMin($r){
+    foreach ($r as $v){
+        if(!isset($tmp)){
+            $tmp = $v;
+        }
+        if($v < $tmp){
+            $tmp = $v;
+        }
+    }
+    return $tmp;
 }
 
 //var_dump($r);
