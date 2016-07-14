@@ -1,22 +1,23 @@
 <?PHP
 /**
- * @TODO 运行超时
- *  @desc 思路：将省ip段配置和ip列表分别排序，而后遍历列表1的时候记录列表2的最小位置，之后遍历就只会从最小位置开始查找
+ *  正确
+ * @desc 思路：将省ip段配置和ip列表分别排序，而后遍历列表1的时候记录列表2的最小位置，之后遍历就只会从最小位置开始查找
  * @author wangtong1
  */
 
 $data = file_get_contents("php://stdin");
 $datas = explode(PHP_EOL,$data);
 array_pop($datas);
-$group = array_shift($datas);
+$k = 0; //代替array_shift , 比array_shift效率高很多
+$group = $datas[$k++];
 for($g=0; $g<$group; $g++){
     $res  = array(); //省id为键值的结果数组
     
     //省配置数组
     $pr = array();
-    $provs = array_shift($datas);
+    $provs = $datas[$k++];
     for($i=0;$i<$provs;$i++){
-        $ps = explode(" ", array_shift($datas));
+        $ps = explode(" ", $datas[$k++]);
         $pr[ip2long($ps[0])] = array('id'=>$ps[2], 'max'=>ip2long($ps[1]));
         $res[$ps[2]] = 0;
     }
@@ -24,9 +25,9 @@ for($g=0; $g<$group; $g++){
 
     //ip
     $ips = array(); //ip数组
-    $ip_cnt = array_shift($datas);
+    $ip_cnt = $datas[$k++];
     for($j=0;$j<$ip_cnt;$j++){
-        $ips[] = ip2long(array_shift($datas));
+        $ips[] = ip2long($datas[$k++]);
     }
     sort($ips); //按照ip值排序ip数组
     
@@ -45,8 +46,8 @@ for($g=0; $g<$group; $g++){
     
     //结果排序输出
     ksort($res);
-    foreach($res as $k=>$v){
-        echo $k." ".$v.PHP_EOL;
+    foreach($res as $rk=>$rv){
+        echo $rk." ".$rv.PHP_EOL;
     }
 }
 
