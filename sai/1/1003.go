@@ -20,10 +20,10 @@ func main() {
 	//inStr := string(inByte)
 	inSli := strings.Split(inStr, "\n")
 	group, _ := strconv.Atoi(inSli[0])
-	inSli = inSli[1:]
+	k := 1
 	for i := 1; i <= group; i++ {
-		provI, _ := strconv.Atoi(inSli[0])
-		inSli = inSli[1:]
+		provI, _ := strconv.Atoi(inSli[k])
+		k += 1
 
 		//结果，默认0
 		provRes := make(map[int]int)
@@ -31,20 +31,20 @@ func main() {
 		//省配置
 		provMap := make(map[int]map[string]int)
 		for p := 1; p <= provI; p++ {
-			provSli := strings.Split(inSli[0], " ")
+			provSli := strings.Split(inSli[k], " ")
 			provKey, _ := strconv.Atoi(provSli[2])
 			provMap[provKey] = map[string]int{"min": ip2long(provSli[0]), "max": ip2long(provSli[1])}
 			provRes[provKey] = 0
-			inSli = inSli[1:]
+			k += 1
 		}
 		//fmt.Println(provMap)
-		ipI, _ := strconv.Atoi(inSli[0])
-		inSli = inSli[1:]
+		ipI, _ := strconv.Atoi(inSli[k])
+		k += 1
 
 		//ip
 		for m := 1; m <= ipI; m++ {
-			long := ip2long(inSli[0])
-			inSli = inSli[1:]
+			long := ip2long(inSli[k])
+			k += 1
 			for pk, pv := range provMap {
 				if long >= pv["min"] && long <= pv["max"] {
 					provRes[pk] += 1

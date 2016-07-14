@@ -1,7 +1,7 @@
 <?PHP
-
 /**
  * @TODO 运行超时
+ *  @desc 思路：将省ip段配置和ip列表分别排序，而后遍历列表1的时候记录列表2的最小位置，之后遍历就只会从最小位置开始查找
  * @author wangtong1
  */
 
@@ -10,92 +10,61 @@ $datas = explode(PHP_EOL,$data);
 array_pop($datas);
 $group = array_shift($datas);
 for($g=0; $g<$group; $g++){
-    //省配置
+    $res  = array(); //省id为键值的结果数组
+    
+    //省配置数组
+    $pr = array();
     $provs = array_shift($datas);
     for($i=0;$i<$provs;$i++){
-        $p = array_shift($datas);
-        $ps = explode(" ", $p);
-        $pr[] = array('prov'=>$ps[2], 'min'=>ip2long($ps[0]), 'max'=>ip2long($ps[1]));
+        $ps = explode(" ", array_shift($datas));
+        $pr[ip2long($ps[0])] = array('id'=>$ps[2], 'max'=>ip2long($ps[1]));
         $res[$ps[2]] = 0;
     }
-    $pr = array_sort($pr,'min'); 
+    ksort($pr); //按照ip值的key排序省配置数组
 
     //ip
-    $ips = array_shift($datas);
-    for($j=0;$j<$ips;$j++){
-        $ip = ip2long(array_shift($datas));
-        //二分查找 
-        $low = 0;
-        $high = count($pr)-1;
-        while($low <= $high){
-            $mid = intval(($low+$high)/2);
-            if($ip >=  $pr[$mid]['min'] && $ip <= $pr[$mid]['max']){
-                $res[$pr[$mid]['prov']] += 1;
+    $ips = array(); //ip数组
+    $ip_cnt = array_shift($datas);
+    for($j=0;$j<$ip_cnt;$j++){
+        $ips[] = ip2long(array_shift($datas));
+    }
+    sort($ips); //按照ip值排序ip数组
+    
+    //查找， 遍历省配置list，将ip list 的最小值开始遍历
+    $low = 0; 
+    foreach ($pr as $pk=>$pv){
+        for($i=$low;$i<$ip_cnt ;$i++){
+            if($ips[$i] >= $pk && $ips[$i] <= $pv['max']){
+                $res[$pv['id']] ++;
+                $low = $i+1;
+            }elseif($ips[$i] > $pv['max']){
                 break;
-            }elseif($ip < $pr[$mid]['min']){
-                $high = $mid-1;
-            }elseif($ip > $pr[$mid]['max']){
-                $low = $mid+1;
             }
         }
-
     }
+    
+    //结果排序输出
     ksort($res);
     foreach($res as $k=>$v){
         echo $k." ".$v.PHP_EOL;
     }
-
-
-
 }
 
 
-    function array_sort($arr, $col = "", $order = "SORT_ASC")
-    {
-        $new_array  = array();
-        $sort_array = array();
-
-        if(is_array($arr) && !empty($arr))
-        {
-            foreach($arr as $k => $v)
-            {
-                if(is_array($v))
-                {
-                    foreach ($v as $kk => $vv)
-                    {
-                        if($kk == $col)
-                        {
-                            $sort_array[$k] = $vv;
-                        }
-                    }
-                }
-                else
-                {
-                    $sort_array[$k] = $v;
-                }
-            }
-
-            switch ($order)
-            {
-                case "SORT_ASC":
-                    asort($sort_array);
-                break;
-                case "SORT_DESC":
-                    arsort($sort_array);
-                break;
-                default :
-                    return array();
-                    break;
-            }
-
-            foreach ($sort_array as $k => $v) {
-                $new_array[$k] = $arr[$k];
-            }
-        }
-
-        return $new_array;
-    }
-//var_dump($datas);
+//二分查找
+// $low = 0;
+// $high = count($pr)-1;
+// while($low <= $high){
+//     $mid = intval(($low+$high)/2);
+//     if($ip >=  $pr[$mid]['min'] && $ip <= $pr[$mid]['max']){
+//         $res[$pr[$mid]['prov']] += 1;
+//         break;
+//     }elseif($ip < $pr[$mid]['min']){
+//         $high = $mid-1;
+//     }elseif($ip > $pr[$mid]['max']){
+//         $low = $mid+1;
+//     }
+// }
 
 /**
 IP 地址统计
