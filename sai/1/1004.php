@@ -2,18 +2,22 @@
 /**
  * @author wangtong1@xiaomi.com
  * @TODO 运行超时
+ * @desc 思路：重点在于min在耗时，程序运行中保存最小值即可
  */
 
 $d = file_get_contents("php://stdin");
 $ds = explode(PHP_EOL,$d);
-$group = array_shift($ds);
+$k = 0;
+$group = $ds[$k++];
 for($i=0;$i<$group;$i++){
-    $line = array_shift($ds);
+    $line = $ds[$k++];
+    $is_ch = 1; //数据有无修改
     $r = array();
     for($j=0;$j<$line;$j++){
-        $cmd = explode(" ",array_shift($ds));
+        $cmd = explode(" ",$ds[$k++]);
         if($cmd[0] == 'set'){
             $r[$cmd[1]] = $cmd[2];
+            isset($d_min) && $cmd[2] > $d_min && $is_ch = 1;
         }elseif($cmd[0] == 'get'){
             if(isset($r[$cmd[1]])){
                 echo $r[$cmd[1]];
@@ -25,10 +29,13 @@ for($i=0;$i<$group;$i++){
             if(!isset($r) || empty($r)){
                 echo 'nil';
             }else{
-               echo getMin($r);
+                $is_ch == 1 && $d_min = getMin($r);
+                echo $d_min;
+                $is_ch = 0;
             }
             echo PHP_EOL;
         }elseif($cmd[0] == 'del'){
+            isset($d_min) && $r[$cmd[1]] == $d_min && $is_ch = 1;
             unset($r[$cmd[1]]);
         }
     }
