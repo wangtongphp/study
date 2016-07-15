@@ -1,7 +1,7 @@
 <?php
 /**
  * @author wangtong1@xiaomi.com
- * @desc 第四届编程比赛第1题
+ * @desc 编程比赛第1题,思路：将mihome和fen分别排序，双层遍历并记录最小值
  */
 
 $data = file_get_contents("php://stdin");
@@ -15,42 +15,6 @@ for($g=0; $g<$group; $g++){
     run2($mihomes, $fens);
 }
 
-
-function run1($mihomes,$fens){
-    sort($mihomes);
-    sort($fens);
-    //var_dump($fens);
-    //var_dump($mihomes);
-    $cnt = count($mihomes);
-    $total =0; 
-    foreach($fens as $k=>$v){
-        foreach($mihomes as $kk=>$vv){
-            $len = abs($v - $vv);
-            if(!isset($min)){
-                $min = $len;
-            }
-            if($len > $min){
-                $total += $min;
-                //echo $min.PHP_EOL;
-                //var_dump($v, $vv);
-                unset($min);
-                break;
-            }else{
-                $min = $len;
-            }
-
-            if($kk==$cnt-1){
-                $total += $len;
-                unset($min);
-                break;
-            }
-
-        }
-    }
-    echo $total;
-    
-    echo PHP_EOL;
-}
 
 function run2($mihomes,$fens){
     sort($mihomes);

@@ -27,10 +27,6 @@ for($g=0; $g<$group; $g++){
 }
 
 
-function run(){
-
-    echo PHP_EOL;
-}
 
 
 /**
