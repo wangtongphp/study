@@ -15,8 +15,3 @@ for($g=0; $g<$group; $g++){
 
     }
 }
-
-function run($data){
-
-    echo PHP_EOL;
-}
