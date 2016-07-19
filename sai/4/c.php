@@ -1,6 +1,7 @@
 <?php
 /**
- * @TODO 结果错误
+ * @TODO 运行超时
+ * @desc 思路：将所有用户喜欢的所有类目统计，循环3个类目的组合，每种组合内遍历用户喜欢的类目和金额，如果用户喜欢的类目在组合中则金额记录总金额，对比每个组合的总金额即可
  * @author wangtong1@xiaomi.com
  */
 
@@ -10,6 +11,7 @@ $k = 0;
 $group = $datas[$k++];
 for($g=0; $g<$group; $g++){
 
+    $d = array();
     $d = explode(" ", $datas[$k++]);
 
     //run
@@ -18,38 +20,47 @@ for($g=0; $g<$group; $g++){
     if($d[0]<4){
         for($i=0;$i<$d[1];$i++){
             $p = explode(" ", $datas[$k++]);
-            //var_dump($p);
             $t +=$p[3];
         }
         echo $t;
         echo PHP_EOL;
     }else{
-       //分前三个类目的金额做排序
-       $x = array();
-       $y = array();
-       $z = array();
-       $h = array();
+       //cates
+       $cates = array();
+       $users = array();
        for($i=0;$i<$d[1];$i++){
             $p = explode(" ", $datas[$k++]);
-            $x[$p[0]] = $p[3];
-            $y[$p[1]] = $p[3];
-            $z[$p[2]] = $p[3];
-            $h[] = $p[3];
-       }
-       
-       asort($x);
-       asort($y);
-       asort($z);
-       rsort($h);
-
-        //var_dump($x,$y,$z);
-
             
-       echo $h[0] + $h[1] + $h[2];
+            $cates[] = $p[0];
+            $cates[] = $p[1];
+            $cates[] = $p[2];
+            $users[] = $p;
+       }
+       $cates = array_values(array_unique($cates));
+       $cate_cnt = count($cates);
 
-       //echo $t;
-       echo PHP_EOL;
+       //所有类目的组合
+        for($ik=0;$ik<$cate_cnt-2;$ik++){
+           for($ikk=$ik+1;$ikk<$cate_cnt-1;$ikk++){
+                for($ikkk=$ikk+1;$ikkk<$cate_cnt;$ikkk++){
+                    $cs = array($cates[$ik], $cates[$ikk], $cates[$ikkk]);
+                    $t_amount = 0;
+                    foreach($users as $uk=>$v){
+                        if(in_array($v[0],$cs) || in_array($v[1],$cs) || in_array($v[2],$cs)){
+                            $t_amount += $v[3];
+                        }
+                    }
+                    if(!isset($max_amount) || $max_amount < $t_amount){
+                        $max_amount = $t_amount;
+                    }
+                }
+           }
+        }
 
+        echo $max_amount;
+        unset($max_amount);
+
+        echo PHP_EOL;
     }
 }
 

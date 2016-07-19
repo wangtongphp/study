@@ -1,5 +1,6 @@
 <?php
 /**
+ * @status 通过
  * @author wangtong1@xiaomi.com
  * @desc 编程比赛第1题,思路：将mihome和fen分别排序，双层遍历并记录最小值
  */

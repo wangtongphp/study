@@ -1,5 +1,6 @@
 <?php
 /**
+ * @status 通过
  * @author wangtong1@xiaomi.com
  */
 

@@ -1,3 +1,7 @@
+/**
+ * @status 通过
+ */
+
 package main
 
 import (

@@ -1,4 +1,5 @@
 /*
+ * @status 通过
  * @author wangtong1@xiaomi.com
  * @desc 此题注意，每行输出的最后一位不能有空格
  */

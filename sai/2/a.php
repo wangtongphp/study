@@ -1,36 +1,8 @@
 <?php
 /**
- * @author wangtong
+ * @status 通过
+ * @author wangtong1@xiaomi.com
  */
-
-/**
-Are You Ok?
-题目描述：
-“我叫你三声，你敢答应吗？”
-“Are you  ok? 
-Are you ok? 
-Are you ok? ….”
-风靡网络的《Are you  ok》相信已经街知巷闻，如今你作为神曲的编曲，收
-集了大量语料文本，而你需要从这些文本中按字母进行拆解并重新组合，统计最
-后到底能重组成多少句神曲 are  you ok
-比如原始文本是:  
-Are you ok? I am  fine, thank you and what’s  your  name  ? I am Richard.
-按字母拆解以后并重组（大小写不区分，不包含空格），能组成 2 句 are you  ok
-输入：
-输入第一行为 T，表示有 T 组测试数据， （1<=T<=10）。
-接下来有 T 组测试数据，每组数据包含一行，是一段英文文本（文本长度在
-10^6 以内）。
-输出：
-你的输出包含 T 行，每行是一组测试数据的结果，
-对每组测试数据，输出一个数字，表示文本最多能重组多少句神曲。
-样例输入：
-2
-Are you ok? I am  fine, thank you and what’s  your  name  ? I am  Richard.
-How are you.
-样例输出：
-2
-0
-*/
 
 //$f = file("./a/input-1.txt");
 $f = file('php://stdin');
@@ -76,3 +48,33 @@ foreach($res as $v){
 	echo $v.PHP_EOL;	
 }
 //file_put_contents("./a/out-1.txt",$out);
+
+
+/**
+Are You Ok?
+题目描述：
+“我叫你三声，你敢答应吗？”
+“Are you  ok? 
+Are you ok? 
+Are you ok? ….”
+风靡网络的《Are you  ok》相信已经街知巷闻，如今你作为神曲的编曲，收
+集了大量语料文本，而你需要从这些文本中按字母进行拆解并重新组合，统计最
+后到底能重组成多少句神曲 are  you ok
+比如原始文本是:  
+Are you ok? I am  fine, thank you and what’s  your  name  ? I am Richard.
+按字母拆解以后并重组（大小写不区分，不包含空格），能组成 2 句 are you  ok
+输入：
+输入第一行为 T，表示有 T 组测试数据， （1<=T<=10）。
+接下来有 T 组测试数据，每组数据包含一行，是一段英文文本（文本长度在
+10^6 以内）。
+输出：
+你的输出包含 T 行，每行是一组测试数据的结果，
+对每组测试数据，输出一个数字，表示文本最多能重组多少句神曲。
+样例输入：
+2
+Are you ok? I am  fine, thank you and what’s  your  name  ? I am  Richard.
+How are you.
+样例输出：
+2
+0
+*/
