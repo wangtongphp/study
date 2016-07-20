@@ -1,7 +1,8 @@
 <?php
 /**
  * @TODO 运行超时
- * @desc 思路：将所有用户喜欢的所有类目统计，循环3个类目的组合，每种组合内遍历用户喜欢的类目和金额，如果用户喜欢的类目在组合中则金额记录总金额，对比每个组合的总金额即可
+ * @desc 基础思路：将所有用户喜欢的所有类目统计，循环3个类目的组合，每种组合内遍历用户喜欢的类目和金额，如果用户喜欢的类目在组合中则金额记录总金额，对比每个组合的总金额即可
+    tips: 为了优化每个组合都要遍历所有用户的问题，提前汇总每个类目的所有用户，然后这里将三个类目的所有用户提取出来合并去重余额相加即是金额。
  * @author wangtong1@xiaomi.com
  */
 
@@ -31,24 +32,24 @@ for($g=0; $g<$group; $g++){
        for($i=0;$i<$d[1];$i++){
             $p = explode(" ", $datas[$k++]);
             
-            $cates[] = $p[0];
-            $cates[] = $p[1];
-            $cates[] = $p[2];
-            $users[] = $p;
+            $cates[$p[0]][] = $i;
+            $cates[$p[1]][] = $i;
+            $cates[$p[2]][] = $i;
+            $users[$i] = $p[3];
        }
-       $cates = array_values(array_unique($cates));
        $cate_cnt = count($cates);
+       $cks = array_keys($cates);
+       //var_dump($cates, $cks);exit;
 
        //所有类目的组合
         for($ik=0;$ik<$cate_cnt-2;$ik++){
            for($ikk=$ik+1;$ikk<$cate_cnt-1;$ikk++){
                 for($ikkk=$ikk+1;$ikkk<$cate_cnt;$ikkk++){
-                    $cs = array($cates[$ik], $cates[$ikk], $cates[$ikkk]);
                     $t_amount = 0;
-                    foreach($users as $uk=>$v){
-                        if(in_array($v[0],$cs) || in_array($v[1],$cs) || in_array($v[2],$cs)){
-                            $t_amount += $v[3];
-                        }
+                    $user_keys = array_unique(array_merge($cates[$cks[$ik]], $cates[$cks[$ikk]], $cates[$cks[$ikkk]]));
+                    //var_dump($user_keys);exit;
+                    foreach($user_keys as $kv){
+                            $t_amount += $users[$kv];
                     }
                     if(!isset($max_amount) || $max_amount < $t_amount){
                         $max_amount = $t_amount;

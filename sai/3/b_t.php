@@ -11,6 +11,7 @@ class Node {
 function preorder($root){
     $stack = array();
     array_push($stack, $root);
+    //var_dump($stack,$root, array_pop($stack));
     while(!empty($stack)){
         $center_node = array_pop($stack);
         echo $center_node->value.' ';
@@ -40,20 +41,18 @@ function postorder($root){
         $pushstack = array();
         $visitstack = array();
         array_push($pushstack, $root);
- 
-        while (!empty($pushstack)) {
+        while(!empty($pushstack)){
+
             $center_node = array_pop($pushstack);
             array_push($visitstack, $center_node);
             if ($center_node->left != null) array_push($pushstack, $center_node->left);
             if ($center_node->right != null) array_push($pushstack, $center_node->right);
         }
- 
-        while (!empty($visitstack)) {
+        while( !empty($visitstack)) {
             $center_node = array_pop($visitstack);
             echo $center_node->value. " ";
         }
 }
- 
 //创建如上图所示的二叉树
 $a = new Node();
 $b = new Node();
@@ -67,14 +66,15 @@ $c->value = 'C';
 $d->value = 'D';
 $e->value = 'E';
 $f->value = 'F';
-$a->left = $b;
-$a->right = $c;
-$b->left = $d;
-$c->left = $e;
-$c->right = $f;
- 
+$a->left = $b; 
+$a->right = $c; 
+$b->left = $d; 
+$c->left = $e; 
+$c->right = $f; 
 //前序遍历
-preorder($a);  //结果是：A B D C E F
-inorder($a);  //结果是： D B A E C F
-postorder($a); //结果是:  D B E F C A
+  //结果是：A B D C E F
+preorder($a);
+
+//inorder($a);  //结果是： D B A E C F
+//postorder($a); //结果是:  D B E F C A
 

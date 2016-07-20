@@ -17,15 +17,17 @@ for($i=0;$i<99999;$i++){
     //$arr[++$j] ;
     //$arr[$i];
     //array_shift($arr); //巨慢无比,等不到结果
+    if(in_array(3,array($i))){
+
+    }
 }
     
 
 foreach($arr as $k=>$v){
 
-    for($i=0;$i<999;$i++){
-        
-    }
 }
+
+
 
 
 $e_ti = microtime();
