@@ -4,13 +4,16 @@
  * @author wangtong1
  */
 
-//$f = file("./s/input-2.txt");
-$f = file('php://stdin');
+$file = file_get_contents("./s/input-2.txt");
+$f = explode(PHP_EOL,$file);
+//$f = file_get_contents('php://stdin');
 $k=0;
 $group= $f[$k++];
 
 for($g=1; $g<=$group; $g++){
     $line= $f[$k++];
+    //组装初始二叉树
+    $N = array();
     for($l=1; $l<$line; $l++){
         $n = explode(" ", $f[$k++]);
         if(!isset($N[$n[0]]) ){
@@ -21,12 +24,68 @@ for($g=1; $g<=$group; $g++){
             $N[$n[1]] = new Node();
             $N[$n[1]]->value = $n[1];
         }
-        $n[2] == 1 ? $N[$n[1]]->left=$n[0] : $N[$n[1]]->right=$n[0];
+        
+        if($n[2] == 1){
+            $N[$n[1]]->left=$N[$n[0]];
+        }else{
+            $N[$n[1]]->right=$N[$n[0]];
+        }
+        $N[$n[0]]->p = $N[$n[1]]->value;
     }
-    print_r($N);exit;
+
+    //找出最终的二叉树,$Node
+    foreach($N as $kN=>$vN){
+        if(!isset($vN->p)){
+            $Node = $vN;
+            break;
+        }
+    }
+
+    //print_r($Node);
     //$N左右节点交换
+    swapLR($Node);
+
+    preorder($Node);
+    echo PHP_EOL;
+    inorder($Node);
+    echo PHP_EOL;
 }
 
+//前序遍历，递归
+function preorder($node){
+    if(empty($node)){
+        return;
+    }
+    echo $node->value;
+    echo ' ';
+    preorder($node->left);
+    preorder($node->right);
+}
+
+//中序遍历，递归
+function inorder($node){
+    if(empty($node)){
+        return;
+    }
+    inorder($node->left);
+    echo $node->value;
+    echo ' ';
+    inorder($node->right);
+}
+
+//递归交换二叉树的左右节点
+function swapLR(&$node){
+    if(empty($node)){
+        return ;
+    }
+    if(!empty($node->left) && !empty($node->right)){
+        $tmp = $node->left;
+        $node->left = $node->right;
+        $node->right = $tmp;
+    }
+    swapLR($node->left);
+    swapLR($node->right);
+}
 
 Class Node{
     public $left;
@@ -34,23 +93,48 @@ Class Node{
     public $right;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 树交换
 题目描述：
 给出一个二叉树，将树中每个节点的左右儿子交换，输出交换后的树的先序
 遍历和中序遍历。比如：
 转换前：
-    1
-    / \
-2      3
+           1
+          / \
+        2      3
       /    \
     4        5
 交换后：
-      1
-    /    \
-3        2
-       /    \
-    5        4
+            1
+           /  \
+          3     2
+              /   \
+             5      4
 交换后的先序遍历： 1 3 2 5 4
 交换后的中序遍历： 3 1 5 2 4
 输入：
