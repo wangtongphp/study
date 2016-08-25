@@ -1,6 +1,6 @@
 <?PHP
 /**
- * @TODO 结果错误
+ * @TODO 运行错误
  * @author wangtong1
  */
 
