@@ -6,42 +6,33 @@
 
 //$f = file("./s/input-2.txt");
 $f = file('php://stdin');
-$line = array_shift($f);
+$k=0;
+$group= $f[$k++];
 
-for($i=1; $i<=$line; $i++){
-	$nums = array_shift($f);
-	$m = 0;
-	$n = 0;
-	for($j=0; $j<$nums-1; $j++){
-		$row = array_shift($f);
-		$rows = explode(" ", $row);
-		if($j==0){
-			$arr[0][0] = $rows[1];
-			$y[$rows[1]] = 0;
-			$x[$rows[1]] = 0;
-		}
-		// ¼Ç×¡½ÚµãµÄy×ø±ê
-		if(isset($y[$row[1]])){
-			$y[$row[0]] = $y[$row[1]]+1;
-		}elseif(isset($y[$row[0]])){
-			$y[$row[1]] = $y[$row[0]]-1;
-		}
-		// x×ø±ê
-		if($rows[2] == 2){
-			$x[$row[0]] = $x[$row[1]] - 1;
-		}else{
-			$x[$row[0]] = $x[$row[1]] + 1;
-		}
-		// ½á¹ûÊý×é
-		$arr[$x[$row[0]]][$y[$rows[0]]] = $rows[0];
-
-		
-	}
+for($g=1; $g<=$group; $g++){
+    $line= $f[$k++];
+    for($l=1; $l<$line; $l++){
+        $n = explode(" ", $f[$k++]);
+        if(!isset($N[$n[0]]) ){
+            $N[$n[0]] = new Node();
+            $N[$n[0]]->value = $n[0];
+        }
+        if(!isset($N[$n[1]]) ){
+            $N[$n[1]] = new Node();
+            $N[$n[1]]->value = $n[1];
+        }
+        $n[2] == 1 ? $N[$n[1]]->left=$n[0] : $N[$n[1]]->right=$n[0];
+    }
+    print_r($N);exit;
+    //$N左右节点交换
 }
 
-var_dump($arr);
 
-
+Class Node{
+    public $left;
+    public $value;
+    public $right;
+}
 
 /*
 树交换

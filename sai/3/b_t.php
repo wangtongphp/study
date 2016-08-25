@@ -15,6 +15,7 @@ function preorder($root){
     while(!empty($stack)){
         $center_node = array_pop($stack);
         echo $center_node->value.' ';
+        //print_r($stack);
         
         if($center_node->right != null) array_push($stack, $center_node->right);
         if($center_node->left != null) array_push($stack, $center_node->left);
@@ -53,6 +54,19 @@ function postorder($root){
             echo $center_node->value. " ";
         }
 }
+
+function recPreFor($root){
+    $resO[] = $root;
+   echo  $root->value;
+   if ( isset($root->left)){
+       recPreFor($root->left);
+   }else if(isset($root->right)){
+        recPreFor($resO->right);
+   }else{
+       recPreFor(array_shift($resO));
+   }
+}
+
 //创建如上图所示的二叉树
 $a = new Node();
 $b = new Node();
@@ -71,10 +85,19 @@ $a->right = $c;
 $b->left = $d; 
 $c->left = $e; 
 $c->right = $f; 
-//前序遍历
-  //结果是：A B D C E F
-preorder($a);
 
-//inorder($a);  //结果是： D B A E C F
+//前序遍历
+preorder($a);  //结果是：A B D C E F
+echo PHP_EOL;
+inorder($a);  //结果是： D B A E C F
+echo PHP_EOL;
+recPreFor($a);
 //postorder($a); //结果是:  D B E F C A
 
+/*
+  A
+ /\
+ B C
+/  /\
+D  E F
+*/

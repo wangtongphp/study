@@ -3,10 +3,13 @@
  * @TODO 运行超时
  * @desc 基础思路：将所有用户喜欢的所有类目统计，循环3个类目的组合，每种组合内遍历用户喜欢的类目和金额，如果用户喜欢的类目在组合中则金额记录总金额，对比每个组合的总金额即可
     tips: 为了优化每个组合都要遍历所有用户的问题，提前汇总每个类目的所有用户，然后这里将三个类目的所有用户提取出来合并去重余额相加即是金额。
+    tips: 为了优化要遍历所有类目组合的问题，将金额最大的九个类目提取，进行组合
  * @author wangtong1@xiaomi.com
  */
 
+$s_time = microtime_float();
 $data = file_get_contents("php://stdin");
+//$data = file_get_contents("./input-c.txt");
 $datas = explode(PHP_EOL,$data);
 $k = 0;
 $group = $datas[$k++];
@@ -27,27 +30,51 @@ for($g=0; $g<$group; $g++){
         echo PHP_EOL;
     }else{
        //cates
-       $cates = array();
-       $users = array();
+       $cates = array(); //每个类的用户 array('cate1'=>array(user1,user2), 'cate2'=>array(user1,user3))
+       $users = array(); // 每个用户的金额 array('user1'=>money1, 'user2'=>money2);
+       $cateMoney = array(); //每个类的所有金额 array('cate1'=>money, 'cate2'=>money2)
+       $cateMoneyArr = array(); //提取金额最大的9个类 array('cate'=>$tCate, 'money'=>$tMoney);
        for($i=0;$i<$d[1];$i++){
-            $p = explode(" ", $datas[$k++]);
+            list($p0,$p1,$p2,$p3) = explode(" ", $datas[$k++]);
+            $p0 = intval($p0);
+            $p1 = intval($p1);
+            $p2 = intval($p2);
+            $p3 = intval($p3);
             
-            $cates[$p[0]][] = $i;
-            $cates[$p[1]][] = $i;
-            $cates[$p[2]][] = $i;
-            $users[$i] = $p[3];
+            $cates[$p0][] = $i;
+            $cates[$p1][] = $i;
+            $cates[$p2][] = $i;
+            $cateMoney[$p0] = isset($cateMoney[$p0]) ? ($cateMoney[$p0] + $p3) : $p3;
+            $cateMoney[$p1] = isset($cateMoney[$p1]) ? ($cateMoney[$p1] + $p3) : $p3;
+            $cateMoney[$p2] = isset($cateMoney[$p2]) ? ($cateMoney[$p2] + $p3) : $p3;
+            $users[$i] = $p3;
        }
-       $cate_cnt = count($cates);
-       $cks = array_keys($cates);
        //var_dump($cates, $cks);exit;
-
+       //仅排序出最大金额的９个类，选择排序
+       foreach($cateMoney as $tCate=>$tMoney){  
+           $cateMoneyArr[] = array('cate'=>$tCate, 'money'=>$tMoney);
+       }
+       $j = 0;
+       $cateMoneyCnt = count($cateMoneyArr);
+       if($cateMoneyCnt > 10){
+           for($j = 0; $j < 9; $j++){
+                for($jj = $cateMoneyCnt-1; $jj > $j; $jj--){
+                    if($cateMoneyArr[$jj]['money'] > $cateMoneyArr[$jj-1]['money']){
+                        $tCA = $cateMoneyArr[$jj];
+                        $cateMoneyArr[$jj] = $cateMoneyArr[$jj-1];
+                        $cateMoneyArr[$jj-1] = $tCA;
+                    }
+                }
+           }
+       }
+       
        //所有类目的组合
-        for($ik=0;$ik<$cate_cnt-2;$ik++){
-           for($ikk=$ik+1;$ikk<$cate_cnt-1;$ikk++){
-                for($ikkk=$ikk+1;$ikkk<$cate_cnt;$ikkk++){
+        for($ik=0;$ik<7;$ik++){
+           for($ikk=$ik+1;$ikk<8;$ikk++){
+                for($ikkk=$ikk+1;$ikkk<9;$ikkk++){
                     $t_amount = 0;
-                    $user_keys = array_unique(array_merge($cates[$cks[$ik]], $cates[$cks[$ikk]], $cates[$cks[$ikkk]]));
-                    //var_dump($user_keys);exit;
+                    $user_keys = array_unique(array_merge($cates[$cateMoneyArr[$ik]['cate']], $cates[$cateMoneyArr[$ikk]['cate']], $cates[$cateMoneyArr[$ikkk]['cate']]));
+                    //var_dump($user_keys);
                     foreach($user_keys as $kv){
                             $t_amount += $users[$kv];
                     }
@@ -63,6 +90,14 @@ for($g=0; $g<$group; $g++){
 
         echo PHP_EOL;
     }
+}
+
+
+//echo microtime_float()-$s_time;
+function microtime_float()
+{
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
 }
 
 
