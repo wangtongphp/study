@@ -1,12 +1,12 @@
 <?PHP
 /**
- * @TODO 运行错误
+ * @TODO 结果错误
  * @author wangtong1
  */
 
-$file = file_get_contents("./s/input-2.txt");
+//$file = file_get_contents("./s/input-2.txt");
+$file = file_get_contents('php://stdin');
 $f = explode(PHP_EOL,$file);
-//$f = file_get_contents('php://stdin');
 $k=0;
 $group= $f[$k++];
 
@@ -78,7 +78,7 @@ function swapLR(&$node){
     if(empty($node)){
         return ;
     }
-    if(!empty($node->left) && !empty($node->right)){
+    if(!empty($node->left) || !empty($node->right)){
         $tmp = $node->left;
         $node->left = $node->right;
         $node->right = $tmp;
