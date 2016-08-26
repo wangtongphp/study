@@ -6,9 +6,11 @@ $b_ti = microtime_float();
 //$data = file_get_contents("./3/s/input-3.txt");
 //$datas = explode(PHP_EOL,$data);
 
-f2();
+f1();
 
 function f1(){
+    //$p = array();
+    //$arr = array();
     for($i=0;$i<999999;$i++){
         $s = "a bb c";
         $p = explode(' ',$s);
@@ -20,6 +22,10 @@ function f1(){
 
 
 function f2(){
+    $p0 = 0;
+    $p1 = 0;
+    $p2 = 0;
+    $arr = array();
     for($i=0;$i<999999;$i++){
         $s = "a bb c";
         list($p0,$p1,$p2) = explode(' ',$s);

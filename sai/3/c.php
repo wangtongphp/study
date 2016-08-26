@@ -1,6 +1,8 @@
 <?php
 /**
- * @desc 
+ * @desc  思路：对所有人的金额排序，最高的效率应该是：最高的给最低的打款,第二高给第二低打款[偶数个人]，
+            计算出流动金额总和 ,计算出手续费总和, 计算出每个人的金额
+ *          如10和20, 则 10+0.8x=20-x 
  * @author wangtong1@xiaomi.com
  */
 
@@ -10,11 +12,13 @@ $k = 0;
 $group = $f[$k++];
 for($g=0; $g<$group; $g++){
 
-    $line = $f[$k++];
-    for($l=0;$l<$line;$l++){
-        $p = explode(' ',$f[$k++]);
-
+    list($line, $rate) = explode(' ',$f[$k++]);
+    $p = explode(' ',$f[$k++]);
+    $t = 0; //总金额
+    foreach($p as $pk=>$pv){
+        $t += $pv;
     }
+
 }
 
 

@@ -10,16 +10,32 @@ $k = 0;
 $group = $f[$k++];
 for($g=0; $g<$group; $g++){
 
-    $line = $f[$k++];
+    list($line1, $line) = explode(' ',$f[$k++]);
+    $a = explode(' ',$f[$k++]);
+    foreach($a as $ak=>$av){
+        $N[$ak] = new Node();
+        $N[$ak]->r = $av;
+    }
     for($l=0;$l<$line;$l++){
-        $p = explode(' ',$f[$k++]);
-
+        preg_match('~([0-9]{1,})*a([0-9]{1,})\+([0-9]{1,})*a([0-9]{1,})=([0-9]{1,})*a([0-9]{1,})~',$f[$k++],$out);
+        $N[$out[6]]->zp = $out[5];
+        $N[$out[6]]->L = $N[$out[1]];
+        $N[$out[6]]->L = $N[$out[2]];
     }
 }
 
 
 
 
+Class Node{
+    public $L; //左节点对象
+    public $R; //右节点对象
+    public $p; //上级券的类型
+    public $v; //券的类型
+    public $zc; //要组合到上级需要的张数
+    public $zp; //如符合子节点条件，能兑换到的张数
+    public $r;  //我实际有几张这个类型的券
+}
 
 
 
