@@ -1,17 +1,18 @@
 <?php
 /**
+ * @desc 
  * @author wangtong1@xiaomi.com
  */
 
-$data = file_get_contents("php://stdin");
-$datas = explode(PHP_EOL,$data);
+$file = file_get_contents("php://stdin");
+$f = explode(PHP_EOL,$file);
 $k = 0;
-$group = $datas[$k++];
+$group = $f[$k++];
 for($g=0; $g<$group; $g++){
 
-    $line = $datas[$k++];
-    for($i=0;$i<$line;$i++){
-        $p = $datas[$k++];
+    $line = $f[$k++];
+    for($l=0;$l<$line;$l++){
+        $p = explode(' ',$f[$k++]);
 
     }
 }

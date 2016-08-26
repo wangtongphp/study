@@ -1,6 +1,8 @@
 <?PHP
 /**
- * @TODO 结果错误
+ * @TODO 通过
+ * @tips: 输出的preorder inorder的两行最后不能有空格，所以不能直接输出，需要用引用的形式放到变量里面，
+          左右树交换，如果其中有个子树为空，依旧交换
  * @author wangtong1
  */
 
@@ -45,32 +47,36 @@ for($g=1; $g<=$group; $g++){
     //$N左右节点交换
     swapLR($Node);
 
-    preorder($Node);
+    $preArr = array();
+    preorder($Node, $preArr);
+    echo implode(' ',$preArr);
     echo PHP_EOL;
-    inorder($Node);
+
+    $inArr = array();
+    inorder($Node, $inArr);
+    echo implode(' ',$inArr);
     echo PHP_EOL;
 }
 
 //前序遍历，递归
-function preorder($node){
+function preorder($node, &$res){
     if(empty($node)){
         return;
     }
-    echo $node->value;
-    echo ' ';
-    preorder($node->left);
-    preorder($node->right);
+    $res[] = $node->value;
+    //echo '_'; //最后不能输出空格
+    preorder($node->left, $res);
+    preorder($node->right, $res);
 }
 
 //中序遍历，递归
-function inorder($node){
+function inorder($node, &$res){
     if(empty($node)){
         return;
     }
-    inorder($node->left);
-    echo $node->value;
-    echo ' ';
-    inorder($node->right);
+    inorder($node->left, $res);
+    $res[] = $node->value;
+    inorder($node->right, $res);
 }
 
 //递归交换二叉树的左右节点
@@ -91,6 +97,7 @@ Class Node{
     public $left;
     public $value;
     public $right;
+    public $p;
 }
 
 
