@@ -1,8 +1,9 @@
 <?PHP
 /**
- * @author wangtong1@xiaomi.com
  * @TODO 运行超时
- * @desc 思路：重点在于min在耗时，程序运行中保存最小值即可
+ * @desc 
+    tips：重点在于min在耗时，程序运行中保存最小值即可
+ * @author wangtong1@xiaomi.com
  */
 
 $d = file_get_contents("php://stdin");
@@ -14,10 +15,10 @@ for($i=0;$i<$group;$i++){
     $is_ch = 1; //数据有无修改
     $r = array();
     for($j=0;$j<$line;$j++){
-        $cmd = explode(" ",$ds[$k++]);
+        $cmd = explode(' ',$ds[$k++]);
         if($cmd[0] == 'set'){
             $r[$cmd[1]] = $cmd[2];
-            isset($d_min) && $cmd[2] > $d_min && $is_ch = 1;
+            isset($d_min) && $cmd[2] < $d_min && $d_min=$cmd[2];
         }elseif($cmd[0] == 'get'){
             if(isset($r[$cmd[1]])){
                 echo $r[$cmd[1]];
