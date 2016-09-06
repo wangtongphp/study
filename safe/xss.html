@@ -1,0 +1,16 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<a style="x:expression(javascript::alert(3))"><?PHP echo $a; ?></a>
+
+<input type="button" onclick="document.write('&lt;img src=@ onerror=alert(33) &gt;')" />
+
+\u0030
+%u0027
+<script>
+var a = <? echo $arg;?>;
+document.write(<?PHP echo $arg; ?>);
+eval(location.hash.substr(1));
+</script>
+
+</html>

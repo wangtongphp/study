@@ -1,0 +1,8 @@
+<div style="height:100%">
+	<div ng-style="{'cursor':row.cursor}" ng-repeat="col in RenderedColumns" ng-class="col.colIndex()" class="ngCell">
+		<div class="ngVerticalBar" ng-style="{hegith:rowHeight}" ng-class="{ngVerticalBarVisible: !$last}">
+			
+		</div>
+		<div ng-cell></div>
+	</div>
+</div>
