@@ -1,0 +1,15 @@
+package main
+
+import (
+	"fmt"
+	"os/exec"
+)
+
+func main() {
+	cmd := exec.Command("ls", "-lah")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		//log.Fatalf("cmd.Run() failed with %Runs\n", err)
+	}
+	fmt.Printf("combined out:\n%s\n", string(out))
+}
