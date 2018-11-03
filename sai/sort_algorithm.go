@@ -4,11 +4,15 @@ package main
 import "fmt"
 
 func main() {
-	var sli = []string{"a", "b", "c"}
-	var sliInt = []int{33, 22, 11, 44, 77}
-	sort1(sli)
-	sort2(sliInt)
-	sort3(sliInt)
+	// var sli = []string{"a", "b", "c"}
+	var sliInt = []int{5, 4, 2, 3, 7}
+	// sort1(sli)
+	// sort2(sliInt)
+	// sort3(sliInt)
+	// sort5(sliInt)
+	fmt.Println(sliInt)
+	quicksort(sliInt, 0, len(sliInt)-1)
+	fmt.Println(sliInt)
 }
 
 func sort1(sli []string) {
@@ -40,6 +44,37 @@ func sort3(sli []int) {
 		}
 	}
 	fmt.Println(sli)
+}
+
+//快速排序
+func quicksort(sli []int, l, r int) {
+	if l < r {
+		i, j, x := l, r, sli[l]
+		for i < j {
+
+			for i < j && sli[j] >= x {
+				j--
+			}
+			if i < j {
+				sli[i] = sli[j]
+				i++
+			}
+
+			for i < j && sli[i] < x {
+				i++
+			}
+			if i < j {
+				sli[j] = sli[i]
+				j--
+			}
+		}
+
+		sli[i] = x
+		fmt.Println(sli)
+		quicksort(sli, l, i-1)
+		quicksort(sli, i+1, r)
+	}
+
 }
 
 //快速,不纯正版，适合PHP实现
@@ -74,7 +109,6 @@ func sort5(values []int) {
 	mid, i := values[0], 1
 	head, tail := 0, len(values)-1
 	for head < tail {
-		fmt.Println(values)
 		if values[i] > mid {
 			values[i], values[tail] = values[tail], values[i]
 			tail--

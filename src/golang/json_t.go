@@ -1,3 +1,8 @@
+// https://colobu.com/2017/06/21/json-tricks-in-Go/
+// 如果 PHP array是空的时候，序列化出来是[]
+//  A int `json:"a,string,omitempty"` 无论在Marshal或UnMarshal都可以互转string和int，转失败会报错值为0
+//  如何优雅的实现，判断解析出来为0的值是真的0还是不存在？
+
 package main
 
 import (
@@ -8,6 +13,8 @@ import (
 	"encoding/gob"
 	"encoding/json"
 	"github.com/bitly/go-simplejson"
+	"github.com/json-iterator/go"
+	"github.com/json-iterator/go/extra"
 	"io"
 	"reflect"
 	"strconv"
@@ -17,8 +24,10 @@ import (
 
 func main() {
 
-	jsonPHPEncode()
-	jsonEncode()
+	// j14()
+	j7()
+	// jsonPHPEncode()
+	// jsonEncode()
 	// jsonEncodeT()
 	// os.Exit(1)
 	//
@@ -34,39 +43,89 @@ func main() {
 
 }
 
-func jsonPHPEncode() {
-	var d1 = []byte(`{"a":3,"b":3}`)
-	// var d1 = []byte(`{"a":3,"b":{"c":4}}`)
+func j14() {
+
+	extra.SetNamingStrategy(extra.LowerCaseWithUnderscores)
+	output, _ := jsoniter.Marshal(struct {
+		UserName      string `json:"-"`
+		FirstLanguage string //`json:"first_language"`
+		Age           int    `json:",string,omitempty"`
+	}{
+		UserName:      "taowen",
+		FirstLanguage: "Chinese",
+		Age:           0,
+	})
+	fmt.Printf("%s, %b \n", output, (`{"user_name":"taowen","first_language":"Chinese"}` == string(output)))
+
+}
+
+func j7() {
+
+	//PHP应该规范用：  json_encode($foo,JSON_FORCE_OBJECT), 或者 (object)array() ， new stdClass()
+	extra.RegisterFuzzyDecoders() //这个能避免[]类型对应错误导致的报错
+	var d1 = []byte(`{"a":"32","b":[]}`)
+	//var d1 = []byte(`{"a":"32","b":{"c":0}}`) // 这个和上面json不一样，但Unmarshal却相同
 	type bs struct {
 		C int `json:"c,omitempty"`
 	}
 	type ts struct {
-		A int `json:"a"`
-		B bs  `json:"b,omitempty"`
+		A int    `json:"a,string,omitempty"`
+		B bs     `json:"b,omitempty"`
+		D string `json:"d,omitempty"`
 	}
 	var res ts
-	err := json.Unmarshal(d1, &res)
+	err := jsoniter.Unmarshal(d1, &res)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err, res)
 	}
 	/**
 	  {A:3 B:{C:0}}
 	  0, int
 	*/
-	fmt.Printf("%+v\n%#v, %T\n", res, res.B.C, res.B.C)
+	tmp := new(ts)
+
+	fmt.Printf("j7(): %+v\n%#v, %T, %#v\n", res, res.B.C, res.B.C)
 
 }
 
+//TODO 如何优雅的实现，判断解析出来为0的值是真的0还是不存在？
+func jsonPHPEncode() {
+	// php -r 'echo json_encode(array("a"=>3,"b"=>array()));';
+	// {"a":3,"b":[]}
+	var d1 = []byte(`{"a":32,"b":[]}`)
+	// var d1 = []byte(`{"b":3}`)
+	// var d1 = []byte(`{"a":3,"b":{"c":4}}`)
+	type bs struct {
+		C int `json:"c,omitempty"`
+	}
+	type ts struct {
+		A int `json:"a,omitempty"`
+		B bs  `json:"b,omitempty"`
+	}
+	var res ts
+	err := json.Unmarshal(d1, &res)
+	if err != nil {
+		fmt.Println(err, res)
+	}
+	/**
+	  {A:3 B:{C:0}}
+	  0, int
+	*/
+	fmt.Printf("jsonPHPEncode(): %+v\n%#v, %T\n", res, res.B.C, res.B.C)
+
+}
+
+// 注意，要加omitempty, 防止数据原义发生变化
 func jsonEncode() {
 	type bs struct {
 		C int `json:"c"`
 	}
 	type ts struct {
-		A int `json:"a"`
+		A int `json:"a,omitempty"`
 		B bs  `json:"b,omitempty"`
 	}
 	orig := ts{
-		A: 3,
+		A: 0, //若为0值，omitempty了，将会忽略此字段， 坑爹...
 		B: bs{
 		// C: 4, //若没有这行，也没哟omitempty，则会解析为 {"a":3,"b":{"c":0}}
 		},
