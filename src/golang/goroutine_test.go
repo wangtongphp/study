@@ -1,4 +1,4 @@
-// go test -v goroutine_test.go -run "WF"  -bench="C"
+// go test -race -v goroutine_test.go -run "Cl"  -bench="xxx"
 package main
 
 import (
@@ -7,6 +7,28 @@ import (
 	"testing"
 	"time"
 )
+
+func Test_Closure(t *testing.T) {
+	s := [...]string{
+		"first",
+		"second",
+		"third",
+	}
+
+	var waitGroup sync.WaitGroup
+	waitGroup.Add(len(s))
+
+	for _, item := range s {
+		go func(i string) {
+			// t.Log(i)
+			t.Log(item)
+			waitGroup.Done()
+		}(item)
+		time.Sleep(1 * time.Microsecond)
+	}
+
+	waitGroup.Wait()
+}
 
 /**
 * @brief go routine, chan
@@ -104,36 +126,33 @@ ok  command-line-arguments30.638s
 func Benchmark_Chan1(b *testing.B) {
 
 	//producer
-	c := make(chan int, 10)
+	c := make(chan int, 256)
 	var wg sync.WaitGroup
 	go func() {
 		for i := 0; i < b.N; i++ {
 			c <- i
 		}
+		close(c)
 	}()
 
 	//time.Sleep(time.Second * 1)
 	//fmt.Println("c:", len(c), cap(c), b.N)
 
 	//consumer
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 3; i++ {
 		wg.Add(1)
 		go func() {
-			defer wg.Done()
 			for {
-				//time.Sleep(time.Second * 1)
-				select {
-				case <-c:
-					// ...
-					//fmt.Println(e)
-				case <-time.After(1 * time.Second):
-					//fmt.Println("timeout")
-					//break
-					return
+				i, ok := <-c
+				if ok == false {
+					break
 				}
+				_ = i + i*2
 			}
+			wg.Done()
 		}()
 	}
+
 	wg.Wait()
 
 }
@@ -169,16 +188,9 @@ func Benchmark_Chan2(b *testing.B) {
 				wg.Done()
 				<-ch
 			}()
-			// ...
-			//time.Sleep(time.Second * 1)
-			select {
-			case <-c:
-				// ...
-				//fmt.Println(e)
-			case <-time.After(1 * time.Second):
-				//fmt.Println("timeout")
-				//break
-				return
+			_, ok := <-c
+			if ok == false {
+				b.Log("ok == false")
 			}
 		}()
 	}

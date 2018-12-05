@@ -14,10 +14,22 @@
   version = "v0.5.0"
 
 [[projects]]
+  name = "github.com/google/gops"
+  packages = ["agent","internal","signal"]
+  revision = "89672dbe3c4ba97d53af7e839e8097e1ccbb4977"
+  version = "v0.3.5"
+
+[[projects]]
   name = "github.com/json-iterator/go"
-  packages = ["."]
+  packages = [".","extra"]
   revision = "1624edc4454b8682399def8740d46db5e4362ba4"
   version = "v1.1.5"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/kardianos/osext"
+  packages = ["."]
+  revision = "ae77be60afb1dcacde03767a8c37337fad28ac14"
 
 [[projects]]
   name = "github.com/konsorten/go-windows-terminal-sequences"
@@ -58,6 +70,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1b36a8f27499702c31362e0d5fa6373cf34055efe6fe2edd8b33912387f2cdbd"
+  inputs-digest = "84a4ab8db74a845722e142cd7984cfde3469d332e1790717ee08b7c74b277f02"
   solver-name = "gps-cdcl"
   solver-version = 1
