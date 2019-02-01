@@ -79,11 +79,9 @@ func j7() {
 		fmt.Println(err, res)
 	}
 	/**
-	  {A:3 B:{C:0}}
-	  0, int
+	  j7(): {A:32 B:{C:0} D:}
+	  0, int, %!v(MISSING)
 	*/
-	tmp := new(ts)
-
 	fmt.Printf("j7(): %+v\n%#v, %T, %#v\n", res, res.B.C, res.B.C)
 
 }

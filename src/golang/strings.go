@@ -1,14 +1,15 @@
 package main
 
 import (
-    //"regexp"
-    "fmt"
+	//"regexp"
+	"fmt"
 )
 
-func main(){
-    grepT()
+func main() {
+	grepT()
 }
 
-func grepT(){
-    fmt.Println("d")
+func grepT() {
+	str := "abcde"
+	fmt.Println(str[3:3])
 }

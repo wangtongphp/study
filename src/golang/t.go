@@ -14,4 +14,16 @@ func main() {
 	row := data["c"]
 	row.amount += 3.4
 	fmt.Print(data, row)
+	var a interface{}
+	a = &A{}
+	fmt.Println(a == nil)
+	b := &B{}
+	fmt.Println(b == nil)
+
+}
+
+type I interface{}
+type A struct {
+}
+type B struct {
 }

@@ -1,4 +1,8 @@
 // wangtong1v:~/devspace/study/src/golang $  GODEBUG="schedtrace=1000,scheddetail=1" ./goroutine_retake
+// wangtong1v:~ $  go build -o goroutine_retake_deal goroutine_retake.go
+// wangtong1v:~ $  go build -gcflags '-N -l' -o goroutine_retake_deal_gcflags goroutine_retake.go
+// wangtong1v:~ $  go tool objdump -s "main" goroutine_retake_deal_gcflags
+// wangtong1v:~/devspace/study/src/golang $  GODEBUG="schedtrace=1000,scheddetail=1" ./goroutine_retake
 
 package main
 
@@ -8,7 +12,7 @@ import (
 )
 
 func main() {
-	runtime.GOMAXPROCS(2)
+	runtime.GOMAXPROCS(3)
 	go printNum()
 	ret := 0
 	for i := 0; ; i++ {

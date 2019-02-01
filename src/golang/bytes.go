@@ -59,7 +59,7 @@ func runeT() {
 // buf
 func bufT() {
 	buf := bytes.NewBufferString("hello world")
-	fmt.Println(buf, buf.String())
+	fmt.Println("*", buf, buf.String())
 
 	resW, _ := buf.Write([]byte(" []bytes "))
 	buf.WriteRune('你')
@@ -70,7 +70,7 @@ func bufT() {
 	file, _ := os.Create("/tmp/gocode_t")
 	buf.WriteTo(file)
 
-	fmt.Println("WriteTo", buf.String())
+	fmt.Println("*", "WriteTo", buf.String())
 
 	fileR, _ := os.Open("/tmp/gocode_t")
 	buf.ReadFrom(fileR)

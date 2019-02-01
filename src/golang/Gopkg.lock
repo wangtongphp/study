@@ -14,6 +14,12 @@
   version = "v0.5.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/buger/jsonparser"
+  packages = ["."]
+  revision = "bf1c66bbce23153d89b23f8960071a680dbef54b"
+
+[[projects]]
   name = "github.com/google/gops"
   packages = ["agent","internal","signal"]
   revision = "89672dbe3c4ba97d53af7e839e8097e1ccbb4977"
@@ -38,6 +44,12 @@
   version = "v1.0.1"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/mailru/easyjson"
+  packages = [".","buffer","jlexer","jwriter"]
+  revision = "60711f1a8329503b04e1c88535f419d0bb440bff"
+
+[[projects]]
   name = "github.com/modern-go/concurrent"
   packages = ["."]
   revision = "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
@@ -48,6 +60,18 @@
   packages = ["."]
   revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
   version = "1.0.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/pquerna/ffjson"
+  packages = ["ffjson","fflib/v1","fflib/v1/internal"]
+  revision = "e517b90714f7c0eabe6d2e570a5886ae077d6db6"
+
+[[projects]]
+  name = "github.com/ugorji/go"
+  packages = ["codec"]
+  revision = "b4c50a2b199d93b13dc15e78929cfb23bfdf21ab"
+  version = "v1.1.1"
 
 [[projects]]
   branch = "master"
@@ -70,6 +94,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "84a4ab8db74a845722e142cd7984cfde3469d332e1790717ee08b7c74b277f02"
+  inputs-digest = "72c6353ea5d72fa744e869a0c1ed8a3795c4bbbd39710fe493fabeff0ce03e27"
   solver-name = "gps-cdcl"
   solver-version = 1
