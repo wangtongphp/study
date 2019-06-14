@@ -125,7 +125,7 @@ func jsonEncode() {
 	orig := ts{
 		A: 0, //若为0值，omitempty了，将会忽略此字段， 坑爹...
 		B: bs{
-		// C: 4, //若没有这行，也没哟omitempty，则会解析为 {"a":3,"b":{"c":0}}
+			// C: 4, //若没有这行，也没哟omitempty，则会解析为 {"a":3,"b":{"c":0}}
 		},
 	}
 	res, err := json.Marshal(orig)

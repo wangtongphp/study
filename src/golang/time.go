@@ -9,7 +9,7 @@ import (
 
 func main() {
 	//strtotimeT()
-	//intToDt()
+	intToDt()
 	timestamp()
 }
 
@@ -32,7 +32,7 @@ func strtotimeT() {
 
 //int 转datetime
 func intToDt() {
-	var v string = "1409988776"
+	var v string = "4294967296"
 	vi, err := strconv.ParseInt(v, 10, 64)
 	t := time.Unix(vi, 0)
 	tt := t.String()
@@ -43,4 +43,5 @@ func intToDt() {
 func timestamp() {
 	timestamp := time.Now().UnixNano()
 	fmt.Println(strconv.FormatInt(timestamp, 10) + "x")
+	fmt.Println(time.Now().Unix())
 }

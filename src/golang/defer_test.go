@@ -27,6 +27,22 @@ func BenchmarkDefer(b *testing.B) {
 		call()
 	}
 }
+
+func Test_Defer(t *testing.T) {
+	defer func() {
+		if err := recover(); err != nil {
+			t.Error("recover", err)
+		}
+	}()
+	defer func() {
+		t.Log("exec defer")
+	}()
+	type tmpS struct {
+		B int
+	}
+	var tmpObj struct{ A *tmpS }
+	t.Log(tmpObj.A.B)
+}
 func call() {
 	m.Lock()
 	// m.Unlock()
