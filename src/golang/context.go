@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+
 	//	"sync"
 	//"strings"
 	"time"
@@ -10,9 +11,9 @@ import (
 
 func main() {
 
-	withCancel()
+	//withCancel()
 
-	//withDealLine()
+	withDealLine()
 
 	//withValue()
 
@@ -37,19 +38,14 @@ func withCancel() {
 		return dst
 	}
 
-	go func() {
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel() // cancel when we are finished consuming integers
-		for n := range gen(ctx) {
-			fmt.Println(n)
-			time.Sleep(1 * time.Second)
-			if n == 5 {
-				break
-			}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel() // cancel when we are finished consuming integers
+	for n := range gen(ctx) {
+		fmt.Println(n)
+		time.Sleep(1 * time.Second)
+		if n == 5 {
+			break
 		}
-	}()
-
-	for {
 	}
 
 }
@@ -83,7 +79,8 @@ func withDealLine() {
 	defer cancel()
 
 	select {
-	case <-time.After(1 * time.Second):
+	case <-time.After(200 * time.Microsecond):
+		time.Sleep(11 * time.Second)
 		fmt.Println("overslept")
 	case <-ctx.Done():
 		fmt.Println(ctx.Err())

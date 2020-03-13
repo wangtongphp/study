@@ -1,37 +1,41 @@
 package main
 
-import "fmt"
-
-type RowDb struct {
-	amount float64
-	atype  string
-}
+import (
+	"fmt"
+)
 
 func main() {
-	//var data map[string]RowDb
+	a, b := 16, 17
+	a, b = b, a
+	fmt.Println(a, b)
 	/*
-		data := make(map[string]RowDb)
-		data["c"] = RowDb{0.7, "3"}
-		row := data["c"]
-		row.amount += 3.4
-		fmt.Print(data, row)
-		var a interface{}
-		a = &A{}
-		fmt.Println(a == nil)
-		b := &B{}
-		fmt.Println(b == nil)
+		m := map[int]int{
+			0:  0,
+			1:  1,
+			2:  2,
+			3:  3,
+			4:  4,
+			5:  5,
+			6:  6,
+			7:  7,
+			8:  8,
+			9:  9,
+			17: 33,
+		}
+
+		p := unsafe.Pointer(&m)
+		fmt.Println(m[17], p)
+
+		fmt.Println("0.0.2" >= "0.0.2")
 	*/
-
-	isli := []int{1, 2}
-	//bsli := []int{}
-	var csli = []int{}
-	fmt.Println(csli == nil, csli)
-	fmt.Println(append(isli, csli...))
-
 }
 
-type I interface{}
-type A struct {
-}
-type B struct {
-}
+/*
+1
+10
+11
+100
+101
+111
+1000
+*/

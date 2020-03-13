@@ -1,2 +1,5 @@
 vendor
 pkg
+*.o
+.idea/
+*.xml

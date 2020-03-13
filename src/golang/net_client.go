@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -20,31 +21,36 @@ func main() {
 
 	c := make(chan os.Signal, 1)
 	for {
-		signal.Notify(c, os.Interrupt)
+		signal.Notify(c, syscall.SIGUSR2)
 
 		// Block until a signal is received.
 		s := <-c
-		code, resp, err := GetDataWithQuery(url, param)
-		fmt.Println(s, code, string(resp), err)
+		for i := 0; i < 2; i++ {
+			go func() {
+				code, resp, err := GetDataWithQuery(url, param)
+				fmt.Println(s, code, string(resp), err)
+			}()
+		}
 	}
 
 }
 
-func GetDataWithQuery(getUrl string, param map[string]string) (statusCode int, response []byte, err error) {
+var httpClient = &http.Client{
+	Transport: &http.Transport{
+		//DisableKeepAlives: true, //server主动关
+		DialContext: (&net.Dialer{
+			Timeout:   500 * time.Millisecond,
+			KeepAlive: 1 * time.Second,
+		}).DialContext,
+		MaxIdleConns:          300,
+		MaxIdleConnsPerHost:   1,
+		IdleConnTimeout:       10 * time.Second,
+		ResponseHeaderTimeout: 500 * time.Millisecond,
+	},
+	Timeout: 800 * time.Millisecond,
+}
 
-	var httpClient = &http.Client{
-		Transport: &http.Transport{
-			DialContext: (&net.Dialer{
-				Timeout:   500 * time.Millisecond,
-				KeepAlive: 30 * time.Second,
-			}).DialContext,
-			MaxIdleConns:          300,
-			MaxIdleConnsPerHost:   100,
-			IdleConnTimeout:       30 * time.Second,
-			ResponseHeaderTimeout: 500 * time.Millisecond,
-		},
-		Timeout: 800 * time.Millisecond,
-	}
+func GetDataWithQuery(getUrl string, param map[string]string) (statusCode int, response []byte, err error) {
 
 	req, err := http.NewRequest("GET", getUrl, nil)
 	if err != nil {

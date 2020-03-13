@@ -10,13 +10,15 @@ import (
 func main() {
 	c := New()
 	c.Add("192.168.1.1", "192.168.1.2", "192.168.1.3", "192.168.1.4")
+	//fmt.Println(c.hashMap)
+	//fmt.Println(c.keys)
 	fmt.Println(c.Get("h|user|28882392"), c.Get("h|user|28882393"), c.Get("h|user|28882394"), c.Get("h|user|28882399"))
 }
 
 type CHash struct {
-	replicas int
-	keys     []int //sort hash slice
-	hashMap  map[int]string
+	replicas int            // 50个副本
+	keys     []int          // sort hash slice , 400个hash值
+	hashMap  map[int]string // 每个hash对应的真实节点IP
 }
 
 func New() *CHash {
@@ -34,6 +36,7 @@ func (c *CHash) Add(keys ...string) {
 			c.keys = append(c.keys, h)
 			c.hashMap[h] = v
 		}
+		//fmt.Println(c.keys)
 	}
 	sort.Ints(c.keys)
 	return
