@@ -8,13 +8,15 @@ type SSMap map[string]string
 
 func main() {
 
+	iter()
+
 	//data:=[6]int{1,5,2,7,2,4}
 	//exec1(data, 6, 2)
 
 	//var s = SSMap{"d": "a"}
 	//s.f1()
 
-	mapokidiom()
+	//mapokidiom()
 
 	concur()
 
@@ -22,16 +24,49 @@ func main() {
 	//fmore()
 }
 
+func iter() {
+
+	m := map[int]int{
+		11:   11,
+		2:    2,
+		333:  333,
+		4444: 4444,
+		5:    5,
+	}
+
+	for _, v := range m {
+
+		fmt.Println(v)
+	}
+
+}
+
 func concur() {
 	m := make(map[int]int, 8)
 
 	go func() {
-		m[1] = 1
-		fmt.Println(m[1])
+		for i := 0; i < 1111; i++ {
+			m[i] = i * i
+		}
 	}()
-	fmt.Println(m[1])
 
-	select {}
+	go func() {
+		for i := 0; i < 10; i = i + 10 {
+			fmt.Println(m[i])
+		}
+	}()
+
+	/*
+		go func() {
+			for i := 0; i < 1111; i++ {
+				m[i] = i
+			}
+		}()
+
+	*/
+	for {
+	}
+
 }
 
 func fmore() {
