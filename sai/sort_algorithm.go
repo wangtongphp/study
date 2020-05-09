@@ -3,18 +3,54 @@ package main
 
 import "fmt"
 
+// 快排 https://github.com/wangzheng0822/algo/blob/master/go/12_sorts/QuickSort.go
 func main() {
 	// var sli = []string{"a", "b", "c"}
-	var sliInt = []int{5, 4, 2, 3, 7}
+	var sliInt = []int{5, 2, 7, 3, 4}
 	// sort1(sli)
 	// sort2(sliInt)
 	// sort3(sliInt)
 	// sort5(sliInt)
-	fmt.Println(sliInt)
-	quicksort(sliInt, 0, len(sliInt)-1)
+	//fmt.Println(sliInt)
+	//quicksort(sliInt, 0, len(sliInt)-1)
+	QuickSort(sliInt)
 	fmt.Println(sliInt)
 }
 
+// QuickSort is quicksort methods for golang
+func QuickSort(arr []int) {
+	separateSort(arr, 0, len(arr)-1)
+}
+
+func separateSort(arr []int, start, end int) {
+	if start >= end {
+		return
+	}
+	i := partition(arr, start, end)
+	separateSort(arr, start, i-1)
+	separateSort(arr, i+1, end)
+}
+
+func partition(arr []int, start, end int) int {
+	// 选取最后一位当对比数字
+	pivot := arr[end]
+
+	var i = start
+	for j := start; j < end; j++ {
+		if arr[j] < pivot {
+			if !(i == j) {
+				// 交换位置
+				arr[i], arr[j] = arr[j], arr[i]
+			}
+			fmt.Println(i, j)
+			i++
+		}
+	}
+
+	arr[i], arr[end] = arr[end], arr[i]
+
+	return i
+}
 func sort1(sli []string) {
 
 	fmt.Println(sli)
@@ -48,32 +84,33 @@ func sort3(sli []int) {
 
 //快速排序
 func quicksort(sli []int, l, r int) {
-	if l < r {
-		i, j, x := l, r, sli[l]
-		for i < j {
+	if l >= r {
+		return
+	}
+	i, j, x := l, r, sli[l]
+	for i < j {
 
-			for i < j && sli[j] >= x {
-				j--
-			}
-			if i < j {
-				sli[i] = sli[j]
-				i++
-			}
-
-			for i < j && sli[i] < x {
-				i++
-			}
-			if i < j {
-				sli[j] = sli[i]
-				j--
-			}
+		for i < j && sli[j] >= x {
+			j--
+		}
+		if i < j {
+			sli[i] = sli[j]
+			i++
 		}
 
-		sli[i] = x
-		fmt.Println(sli)
-		quicksort(sli, l, i-1)
-		quicksort(sli, i+1, r)
+		for i < j && sli[i] < x {
+			i++
+		}
+		if i < j {
+			sli[j] = sli[i]
+			j--
+		}
 	}
+
+	sli[i] = x
+	fmt.Println(sli)
+	quicksort(sli, l, i-1)
+	quicksort(sli, i+1, r)
 
 }
 
