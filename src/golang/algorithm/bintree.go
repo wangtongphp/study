@@ -1,12 +1,8 @@
 package algorithm
 
 import (
-	"test"
 )
 
-func TestRun1(t *testing.T) {
-	run1()
-}
 
 func run1() {
 	//tree

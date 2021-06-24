@@ -8,9 +8,22 @@ import (
 )
 
 func main() {
-	strtotimeT()
+	f1()
+	//strtotimeT()
 	//intToDt()
 	//timestamp()
+}
+func f1(){
+
+	var LOC, _ = time.LoadLocation("Asia/Shanghai")
+	t, _ := time.ParseInLocation("2006-01-02 15:04:05", "2021-05-07 17:32:50", time.Local)
+	t2, _ := time.ParseInLocation("2006-01-02 15:04:05", "2021-05-07 17:32:50", LOC)
+	fmt.Println(t.Unix())
+	fmt.Println(t2.Unix())
+
+	//t:=int64(1619617932)
+	//b:= t < 1609430400 || t > int64(time.Now().Second())
+	//fmt.Println(b, int64(time.Now().Unix()))
 }
 
 //字符串转时间戳,类php的strtotime()
@@ -45,4 +58,5 @@ func timestamp() {
 	timestamp := time.Now().UnixNano()
 	fmt.Println(strconv.FormatInt(timestamp, 10) + "x")
 	fmt.Println(time.Now().Unix())
+	fmt.Println(time.Now().UnixNano())
 }

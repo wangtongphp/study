@@ -3,9 +3,9 @@ package main
 import (
     "fmt"
     "os"
-    "simplemath"
+    //"simplemath"
     "strconv"
-    )
+)
 
 func Usage(){
     fmt.Println("USAGE: calc command [arguments] ...","The commands are:","sqrt 开方,eg: calc sqrt 4 => 2", "add  加和,eg: calc add 2 2 => 4")
@@ -21,8 +21,8 @@ func main(){
             if(err1 != nil || err2 != nil){
                 fmt.Println("add strconv error", r1, r2)
             }
-            res := simplemath.Add(r1, r2)
-            fmt.Println(res)
+            //res := simplemath.Add(r1, r2)
+            //fmt.Println(res)
 /*
         case "sqrt" :
             r1, err1 := strconv.Atoi(arg[1])

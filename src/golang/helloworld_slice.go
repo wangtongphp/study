@@ -21,7 +21,54 @@ func main() {
 	//stringSplit()
 	//templateMain()
 	//fileMain()
-	moreSli()
+	//moreSli()
+	//sl2()
+	//NilSli()
+
+	//<-make(chan int,0)
+	time.Sleep(time.Second*8)
+}
+
+func NilSli(){
+	var a []int
+	var b = make([]int,0)
+	fmt.Println(a==nil, b==nil,a,b)
+	for i,v:=range a{
+		fmt.Println(i,v)
+	}
+	for i,v:=range b{
+		fmt.Println(i,v)
+	}
+	fmt.Println(b[0])
+}
+
+// .
+func sl2() {
+
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("recover....", err)
+		}
+	}()
+	defer func(){
+		fmt.Println()
+	}()
+	val:= []int64{
+		0,1,2,3,
+	}
+	v:=val[len(val)-1]
+	fmt.Println(v)
+}
+
+
+
+// slice 不能用索引赋值
+func sl1() {
+	val:= make(map[int64][]int64)
+	for i:=0;i<3;i++{
+		val[1] = append(val[1],int64(i))
+	}
+	fmt.Println(val)
 }
 
 // slice 不能用索引赋值
